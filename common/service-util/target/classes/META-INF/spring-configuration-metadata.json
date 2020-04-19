@@ -1,0 +1,39 @@
+{
+  "groups": [
+    {
+      "name": "spring.redis",
+      "type": "com.my.gmall.common.config.RedissonConfig",
+      "sourceType": "com.my.gmall.common.config.RedissonConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "spring.redis.a-d-d-r-e-s-s-p-r-e-f-i-x",
+      "type": "java.lang.String",
+      "sourceType": "com.my.gmall.common.config.RedissonConfig",
+      "defaultValue": "redis:\/\/"
+    },
+    {
+      "name": "spring.redis.host",
+      "type": "java.lang.String",
+      "sourceType": "com.my.gmall.common.config.RedissonConfig"
+    },
+    {
+      "name": "spring.redis.password",
+      "type": "java.lang.String",
+      "sourceType": "com.my.gmall.common.config.RedissonConfig"
+    },
+    {
+      "name": "spring.redis.port",
+      "type": "java.lang.String",
+      "sourceType": "com.my.gmall.common.config.RedissonConfig"
+    },
+    {
+      "name": "spring.redis.timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.my.gmall.common.config.RedissonConfig",
+      "defaultValue": 3000
+    }
+  ],
+  "hints": []
+}
