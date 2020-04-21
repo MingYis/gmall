@@ -1,9 +1,9 @@
 package com.my.gmall.product.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.my.gmall.common.result.Result;
-import com.my.gmall.model.product.BaseCategory1;
-import com.my.gmall.model.product.BaseCategory2;
-import com.my.gmall.model.product.BaseCategory3;
+import com.my.gmall.model.product.*;
 import com.my.gmall.product.service.ManageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,7 +19,7 @@ import java.util.List;
 @Api(tags = "后台管理")
 @RestController
 @RequestMapping("/admin/product") //所有请求的路径都是/admin/product开始的
-@CrossOrigin
+//@CrossOrigin
 public class ManageController {
 
     @Autowired
@@ -53,5 +53,33 @@ public class ManageController {
         return Result.ok(baseCategory3List);
     }
 
+    //获取分类id获取平台属性
+    @ApiOperation("获取分类id获取平台属性")
+    @GetMapping("/attrInfoList/{category1Id}/{category2Id}/{category3Id}")
+    public Result attrInfoList(
+            @PathVariable Long category1Id,
+            @PathVariable Long category2Id,
+            @PathVariable Long category3Id
+    ){
+        List<BaseAttrInfo> baseAttrInfoList = manageService.getAttrInfoList(category1Id,category2Id,category3Id);
+        return Result.ok(baseAttrInfoList);
+    }
+
+    //保存平台属性和属性值
+    @ApiOperation("保存平台属性和属性值")
+    @PostMapping("/saveAttrInfo")
+    public Result saveAttrInfo(@RequestBody BaseAttrInfo baseAttrInfo){
+        manageService.saveAttrInfo(baseAttrInfo);
+        return Result.ok();
+    }
+
+    //获取品牌分页列表
+    @ApiOperation("获取品牌分页列表")
+    @GetMapping("/baseTrademark/{page}/{limit}")
+    public Result baseTrademark(@PathVariable Integer page,
+                                @PathVariable Integer limit){
+        IPage<BaseTrademark> baseTrademarkList = manageService.baseTrademark(page, limit);
+        return Result.ok(baseTrademarkList);
+    }
 
 }

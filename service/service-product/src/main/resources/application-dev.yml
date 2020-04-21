@@ -4,8 +4,9 @@ server:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    auto-mapping-behavior: full
   mapper-locations: classpath:com/my/service/*/mapper/*.xml
-
+  type-aliases-package: com.my.gmall.model.product
 spring:
   cloud:
     sentinel:
