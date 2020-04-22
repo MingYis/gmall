@@ -82,4 +82,71 @@ public class ManageController {
         return Result.ok(baseTrademarkList);
     }
 
+    //根据三级分类id查询商品分页集合
+    @ApiOperation("根据三级分类id查询商品分页集合")
+    @GetMapping("/{page}/{limit}")
+    public Result getSpuInfo(@PathVariable Integer page,
+                             @PathVariable Integer limit,
+                             Long category3Id){
+        IPage<SpuInfo> infoIPage = manageService.getSpuInfo(page,limit,category3Id);
+        return Result.ok(infoIPage);
+    }
+
+    //获取品牌属性
+    @GetMapping("/baseTrademark/getTrademarkList")
+    public Result getTrademarkList(){
+        List<BaseTrademark> baseTrademarkList = manageService.getTrademarkList();
+        return Result.ok(baseTrademarkList);
+    }
+
+    //获取销售属性
+    @GetMapping("/baseSaleAttrList")
+    public Result baseSaleAttrList(){
+        List<BaseSaleAttr> baseSaleAttrList = manageService.baseSaleAttrList();
+        return Result.ok(baseSaleAttrList);
+    }
+
+    //保存商品信息    四张表
+    @PostMapping("/saveSpuInfo")
+    public Result saveSpuInfo(@RequestBody SpuInfo spuInfo){
+        manageService.saveSpuInfo(spuInfo);
+        return Result.ok();
+    }
+
+    //根据SpuID查询图片列表
+    @GetMapping("/spuImageList/{spuId}")
+    public Result spuImageList(@PathVariable Long spuId){
+        List<SpuImage> spuImageList = manageService.spuImageList(spuId);
+        return Result.ok(spuImageList);
+    }
+
+    //根据spuId获取销售属性
+    @GetMapping("/spuSaleAttrList/{spuId}")
+    public Result spuSaleAttrList(@PathVariable Long spuId){
+        List<SpuSaleAttr> spuSaleAttrList = manageService.spuSaleAttrList(spuId);
+        return Result.ok(spuSaleAttrList);
+    }
+
+    //添加Sku
+    @PostMapping("/saveSkuInfo")
+    public Result saveSkuInfo(@RequestBody SkuInfo skuInfo){
+        manageService.saveSkuInfo(skuInfo);
+        return Result.ok();
+    }
+    //获取sku分页列表
+    @GetMapping("/list/{page}/{limit}")
+    public Result skuList(@PathVariable Integer page,
+                          @PathVariable Integer limit){
+        IPage<SkuInfo> skuInfoIPage = manageService.skuList(page, limit);
+        return Result.ok(skuInfoIPage);
+    }
+
+    //上架
+    @GetMapping("/onSale/{skuId}")
+    public Result onSale(@PathVariable Long skuId){
+        manageService.onSale(skuId);
+        return Result.ok();
+    }
+
+
 }

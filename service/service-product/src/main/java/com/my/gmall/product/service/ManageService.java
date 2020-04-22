@@ -28,4 +28,31 @@ public interface ManageService {
 
     //获取品牌分页列表
     IPage<BaseTrademark> baseTrademark(Integer page, Integer limit);
+
+    //根据三级分类id查询商品分页集合
+    IPage<SpuInfo> getSpuInfo(Integer page, Integer limit, Long category3Id);
+
+    //获取品牌属性
+    List<BaseTrademark> getTrademarkList();
+
+    //获取销售属性
+    List<BaseSaleAttr> baseSaleAttrList();
+
+    //保存商品信息    四张表
+    void saveSpuInfo(SpuInfo spuInfo);
+
+    //根据SpuID查询图片列表
+    List<SpuImage> spuImageList(Long spuId);
+
+    //根据spuId获取销售属性
+    List<SpuSaleAttr> spuSaleAttrList(Long spuId);
+
+    //添加sku
+    void saveSkuInfo(SkuInfo skuInfo);
+
+    //获取sku分页列表
+    IPage<SkuInfo> skuList(Integer page, Integer limit);
+
+    //上架
+    void onSale(Long skuId);
 }

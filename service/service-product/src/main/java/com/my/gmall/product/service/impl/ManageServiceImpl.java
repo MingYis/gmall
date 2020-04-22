@@ -6,9 +6,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.my.gmall.model.product.*;
 import com.my.gmall.product.mapper.*;
 import com.my.gmall.product.service.ManageService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -31,6 +33,8 @@ public class ManageServiceImpl implements ManageService {
     private BaseAttrValueMapper baseAttrValueMapper;
     @Autowired
     private BaseTrademarkMapper baseTrademarkMapper;
+    @Autowired
+    private SpuInfoMapper spuInfoMapper;
 
     //获取一级分类
     @Override
@@ -88,5 +92,140 @@ public class ManageServiceImpl implements ManageService {
         IPage<BaseTrademark> page1 = baseTrademarkMapper.selectPage(pageTrademark, null);
         return page1;
     }
+
+    //根据三级分类id查询商品分页集合
+    @Override
+    public IPage<SpuInfo> getSpuInfo(Integer page, Integer limit, Long category3Id) {
+        IPage<SpuInfo> infoIPage = new Page(page, limit);
+
+        return spuInfoMapper.selectPage(
+                infoIPage, new QueryWrapper<SpuInfo>().eq("category3_id",category3Id));
+    }
+
+    //获取品牌属性
+    @Override
+    public List<BaseTrademark> getTrademarkList() {
+
+        return baseTrademarkMapper.selectList(null);
+    }
+
+    @Autowired
+    private BaseSaleAttrMapper baseSaleAttrMapper;
+    @Autowired
+    private SpuImageMapper spuImageMapper;
+    @Autowired
+    private SpuSaleAttrMapper spuSaleAttrMapper;
+    @Autowired
+    private SpuSaleAttrValueMapper spuSaleAttrValueMapper;
+
+    //获取销售属性
+    @Override
+    public List<BaseSaleAttr> baseSaleAttrList() {
+        return baseSaleAttrMapper.selectList(null);
+    }
+
+    //保存商品信息    四张表
+    @Override
+    public void saveSpuInfo(SpuInfo spuInfo) {
+        //1.保存SpuInfo   商品信息表
+        spuInfoMapper.insert(spuInfo);
+
+        //2.保存商品图片表
+        List<SpuImage> spuImageList = spuInfo.getSpuImageList();
+        spuImageList.forEach(image ->{
+            //商品信息表的ID作为外键
+            image.setSpuId(spuInfo.getId());
+            spuImageMapper.insert(image);
+        });
+
+        //3.保存商品的销售信息
+        List<SpuSaleAttr> spuSaleAttrList = spuInfo.getSpuSaleAttrList();
+        spuSaleAttrList.forEach(saleAttr ->{
+            //商品信息表的id作为外键
+            saleAttr.setSpuId(spuInfo.getId());
+            spuSaleAttrMapper.insert(saleAttr);
+
+            //4此商品属性包含多个属性值
+            List<SpuSaleAttrValue> spuSaleAttrValueList = saleAttr.getSpuSaleAttrValueList();
+            spuSaleAttrValueList.forEach(saleAttrValue ->{
+                //商品表的id作为外键
+                saleAttrValue.setSpuId(spuInfo.getId());
+                //销售属性的名称
+                saleAttrValue.setSaleAttrName(saleAttr.getSaleAttrName());
+                spuSaleAttrValueMapper.insert(saleAttrValue);
+            });
+
+
+        });
+    }
+
+    //根据SpuID查询图片列表
+    @Override
+    public List<SpuImage> spuImageList(Long spuId) {
+        return spuImageMapper.selectList(new QueryWrapper<SpuImage>().eq("spu_id",spuId));
+    }
+
+    //根据spuId获取销售属性
+    @Override
+    public List<SpuSaleAttr> spuSaleAttrList(Long spuId) {
+        //mapper只有单表操作，没有关联查询，关联查询需要手写sql
+        return spuSaleAttrMapper.spuSaleAttrList(spuId);
+    }
+
+    @Autowired
+    private SkuInfoMapper skuInfoMapper;
+    @Autowired
+    private SkuImageMapper skuImageMapper;
+    @Autowired
+    private SkuAttrValueMapper skuAttrValueMapper;
+    @Autowired
+    private SkuSaleAttrValueMapper skuSaleAttrValueMapper;
+    //添加Sku
+    @Override
+    public void saveSkuInfo(SkuInfo skuInfo) {
+        //默认不卖
+        skuInfo.setIsSale(0);
+        //1.sku_info
+        skuInfoMapper.insert(skuInfo);
+        //2.sku_image
+        List<SkuImage> skuImageList = skuInfo.getSkuImageList();
+        skuImageList.forEach(image ->{
+            //需要外键
+            image.setSkuId(skuInfo.getId());
+            skuImageMapper.insert(image);
+        });
+        //3.销售属性 sku_sale_attr_value
+        List<SkuSaleAttrValue> skuSaleAttrValueList = skuInfo.getSkuSaleAttrValueList();
+        skuSaleAttrValueList.forEach(saleAttrValue ->{
+            saleAttrValue.setSkuId(skuInfo.getId());
+            saleAttrValue.setSpuId(skuInfo.getSpuId());
+            skuSaleAttrValueMapper.insert(saleAttrValue);
+        });
+        //4.保存平台属性 sku_attr_value
+        List<SkuAttrValue> skuAttrValueList = skuInfo.getSkuAttrValueList();
+        skuAttrValueList.forEach(attrValue ->{
+            attrValue.setSkuId(skuInfo.getId());
+            skuAttrValueMapper.insert(attrValue);
+        });
+
+    }
+
+    //获取sku分页列表
+    @Override
+    public IPage<SkuInfo> skuList(Integer page, Integer limit) {
+        IPage<SkuInfo> skuInfoIPage = new Page<>(page,limit);
+
+        return skuInfoMapper.selectPage(skuInfoIPage,null);
+    }
+
+    //上架
+    @Override
+    public void onSale(Long skuId) {
+        SkuInfo skuInfo = new SkuInfo();
+        skuInfo.setId(skuId);
+        skuInfo.setIsSale(1);
+        skuInfoMapper.updateById(skuInfo);
+    }
+
 
 }
