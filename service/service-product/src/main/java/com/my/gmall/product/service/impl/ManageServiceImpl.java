@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mmy
@@ -221,11 +224,70 @@ public class ManageServiceImpl implements ManageService {
     //上架
     @Override
     public void onSale(Long skuId) {
+        //1.更新库存上架状态
         SkuInfo skuInfo = new SkuInfo();
         skuInfo.setId(skuId);
         skuInfo.setIsSale(1);
         skuInfoMapper.updateById(skuInfo);
+        //TODO
     }
+
+    @Override
+    public void cancelSale(Long skuId) {
+        SkuInfo skuInfo = new SkuInfo();
+        skuInfo.setId(skuId);
+        skuInfo.setIsSale(0);
+        skuInfoMapper.updateById(skuInfo);
+    }
+
+    // 前台页面 根据skuId查询库存表
+    @Override
+    public SkuInfo getSkuInfo(Long skuId) {
+        //1.根据skuId查询库存表
+        SkuInfo skuInfo = skuInfoMapper.selectById(skuId);
+        //2.根据skuId查询库存图片表
+        List<SkuImage> skuImageList =
+                skuImageMapper.selectList(new QueryWrapper<SkuImage>().eq("sku_id", skuId));
+        skuInfo.setSkuImageList(skuImageList);
+        return skuInfo;
+    }
+
+    //根据三级分类的id查询一二三级分类的名称
+    @Override
+    public BaseCategoryView getCategoryView(Long category3Id) {
+        return baseCategoryViewMapper.selectById(category3Id);
+    }
+
+    //单独查询价格
+    @Override
+    public BigDecimal getPrice(Long skuId) {
+        SkuInfo skuInfo = skuInfoMapper.selectById(skuId);
+        if (null != skuInfo) {
+            //防止空指针异常
+            return skuInfo.getPrice();
+        }
+        return null;
+    }
+
+    //-- 根据商品ID查询当前销售属性及销售属性值的集合
+    @Override
+    public List<SpuSaleAttr> getSpuSaleAttrListCheckBySku(Long skuId, Long spuId) {
+        return spuSaleAttrMapper.getSpuSaleAttrListCheckBySku(skuId, spuId);
+    }
+
+    //查询组合对应库存ID
+    @Override
+    public Map getSkuValueIdsMap(Long spuId) {
+        Map result = new HashMap();
+        List<Map> skuValueIdsMap = skuSaleAttrValueMapper.getSkuValueIdsMap(spuId);
+        skuValueIdsMap.forEach(map ->{
+            result.put(map.get("values_id"),map.get("sku_id"));
+        });
+        return result;
+    }
+
+    @Autowired
+    private BaseCategoryViewMapper baseCategoryViewMapper;
 
 
 }

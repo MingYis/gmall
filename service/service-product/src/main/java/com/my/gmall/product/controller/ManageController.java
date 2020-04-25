@@ -148,5 +148,12 @@ public class ManageController {
         return Result.ok();
     }
 
+    //下架
+    @GetMapping("/cancelSale/{skuId}")
+    public Result cancelSale(@PathVariable Long skuId){
+        manageService.cancelSale(skuId);
+        return Result.ok();
+    }
+
 
 }
