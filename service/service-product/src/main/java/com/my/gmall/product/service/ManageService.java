@@ -75,4 +75,7 @@ public interface ManageService {
 
     //查询组合对应库存ID
     Map getSkuValueIdsMap(Long spuId);
+
+    //查询分类视图对象集合
+    List<Map> getBaseCategoryList();
 }

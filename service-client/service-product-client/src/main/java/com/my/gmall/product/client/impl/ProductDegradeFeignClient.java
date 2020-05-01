@@ -42,4 +42,9 @@ public class ProductDegradeFeignClient implements ProductFeignClient {
     public Map getSkuValueIdsMap(Long spuId) {
         return null;
     }
+
+    @Override
+    public List<Map> getBaseCategoryList() {
+        return null;
+    }
 }

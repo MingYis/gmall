@@ -70,4 +70,11 @@ public class ProductApiController {
         return manageService.getSkuValueIdsMap(spuId);
     }
 
+    //查询分类视图对象集合
+    @ApiOperation("查询分类视图对象集合")
+    @GetMapping("/getBaseCategoryList")
+    public List<Map> getBaseCategoryList(){
+        return manageService.getBaseCategoryList();
+    }
+
 }

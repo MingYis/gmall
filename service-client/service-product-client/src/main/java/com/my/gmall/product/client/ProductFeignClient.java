@@ -41,8 +41,11 @@ public interface ProductFeignClient {
 
     //查询组合对应库存ID
     //{颜色|版本|套装：skuId，颜色|版本|套装：skuId}
-    @ApiOperation("查询组合对应库存ID")
     @GetMapping("/api/product/inner/getSkuValueIdsMap/{spuId}")
     public Map getSkuValueIdsMap(@PathVariable(name = "spuId") Long spuId);
+
+    //查询分类视图对象集合
+    @GetMapping("/api/product/getBaseCategoryList")
+    public List<Map> getBaseCategoryList();
 
 }

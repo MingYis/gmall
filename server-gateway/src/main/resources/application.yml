@@ -19,6 +19,10 @@ spring:
 #-----------------上面的配置适合后台微服务---------------------
 #-----------------下面的配置适合带域名的前台微服务--------------
         - id: web-item
-          uri: lb://web-all #指前台页面微服务
+          uri: lb://web-all  #前台页面微服务 名称
           predicates:
             - Host=item.gmall.com
+        - id: web-index
+          uri: lb://web-all  #前台页面微服务 名称
+          predicates:
+            - Host=www.gmall.com
