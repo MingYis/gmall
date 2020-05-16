@@ -2,6 +2,7 @@ package com.my.gmall.item.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.my.gmall.item.service.ItemService;
+import com.my.gmall.list.client.ListFeignClient;
 import com.my.gmall.model.product.BaseCategoryView;
 import com.my.gmall.model.product.SkuInfo;
 import com.my.gmall.model.product.SpuSaleAttr;
@@ -28,6 +29,8 @@ public class ItemServiceImpl implements ItemService {
     private ProductFeignClient productFeignClient;
     @Autowired
     private ThreadPoolExecutor threadPoolExecutor;
+    @Autowired
+    private ListFeignClient listFeignClient;
 
     //查询商品详情页面所有的数据
     @Override
@@ -63,7 +66,10 @@ public class ItemServiceImpl implements ItemService {
             //由于页面需要的是json格式的字符串，所以需要将map格式转为json格式
             result.put("valuesSkuJson", JSON.toJSONString(skuValueIdsMap));
         }), threadPoolExecutor);
-
+        //6.增加当前库存的热度
+        CompletableFuture.runAsync(()->{
+            listFeignClient.incrHotScore(skuId);
+        },threadPoolExecutor);
         //主线程执行完了，必须等待所有线程完成
         CompletableFuture.allOf(skuInfoCompletableFuture,categoryViewCompletableFuture,priceCompletableFuture,
                 spuSaleAttrListCompletableFuture, valuesSkuJsonCompletableFuture).join();

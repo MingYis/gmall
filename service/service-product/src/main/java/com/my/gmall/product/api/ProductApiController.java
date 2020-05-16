@@ -1,9 +1,7 @@
 package com.my.gmall.product.api;
 
 import com.my.gmall.common.result.Result;
-import com.my.gmall.model.product.BaseCategoryView;
-import com.my.gmall.model.product.SkuInfo;
-import com.my.gmall.model.product.SpuSaleAttr;
+import com.my.gmall.model.product.*;
 import com.my.gmall.product.service.ManageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -75,6 +73,18 @@ public class ProductApiController {
     @GetMapping("/getBaseCategoryList")
     public List<Map> getBaseCategoryList(){
         return manageService.getBaseCategoryList();
+    }
+
+    //根据品牌ID查询品牌名称
+    @GetMapping("/getTrademark/{tmId}")
+    public BaseTrademark getTrademark(@PathVariable Long tmId){
+        return manageService.getTrademark(tmId);
+    }
+
+    //根据skuId查询平台属性ID、属性名称及属性值
+    @GetMapping("/getSkuAttrValue/{skuId}")
+    public List<SkuAttrValue> getSkuAttrValue(@PathVariable Long skuId){
+        return manageService.getSkuAttrValue(skuId);
     }
 
 }

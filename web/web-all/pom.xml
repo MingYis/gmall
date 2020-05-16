@@ -22,6 +22,20 @@
             <artifactId>service-product-client</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.my.gmall</groupId>
+            <artifactId>service-list-client</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.my.gmall</groupId>
+            <artifactId>service-cart-client</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
     </dependencies>
 
 

@@ -33,5 +33,12 @@ public class SkuAttrValue extends BaseEntity {
 	@TableField("sku_id")
 	private Long skuId;
 
+	//扩展 平台属性对象
+	@TableField(exist = false)
+	private BaseAttrInfo baseAttrInfo;
+	//扩展 平台属性值对象
+	@TableField(exist = false)
+	private BaseAttrValue baseAttrValue;
+
 }
 

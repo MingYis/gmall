@@ -25,12 +25,12 @@
                 <div class="left-pic"><img th:src="${cartInfo.imgUrl}"></div>
                 <div class="right-info">
                     <p class="title" th:text="${cartInfo.skuName}"></p>
-                    <p class="attr" th:text="${skuNum}">数量</p>
+                    <p class="attr" th:text="${cartInfo.skuNum}">数量</p>
                 </div>
             </div>
             <div class="right-gocart">
-                <a th:href="@{http://item.gmall.com/{id}.html(id=${cartInfo.id})}" class="sui-btn btn-xlarge">查看商品详情</a>
-                <a href="/cart.html" class="sui-btn btn-xlarge btn-danger " target="_blank">去购物车结算 > </a>
+                <a th:href="@{http://item.gmall.com/{id}.html(id=${cartInfo.skuId})}" class="sui-btn btn-xlarge">查看商品详情</a>
+                <a href="/cart.html" class="sui-btn btn-xlarge btn-danger ">去购物车结算 > </a>
             </div>
         </div>
     </div>

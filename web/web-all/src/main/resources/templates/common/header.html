@@ -117,7 +117,7 @@
                 },
 
                 login() {
-                    window.location.href = 'http://passport.gmall.com/login.html?originUrl='+window.location.href
+                    window.location.href = 'http://passport.gmall.com/login.html?originUrl='+encodeURIComponent(window.location.href);
                 },
 
                 logout() {

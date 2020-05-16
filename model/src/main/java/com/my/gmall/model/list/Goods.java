@@ -1,17 +1,19 @@
 package com.my.gmall.model.list;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Document(indexName = "goods", type = "info", shards = 3, replicas = 2)
 @Data
-public class Goods {
+public class Goods implements Serializable {
 
     @Id
     private Long id;

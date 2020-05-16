@@ -16,6 +16,10 @@ spring:
           uri: lb://service-product
           predicates:
             - Path=/*/product/** # 路径匹配
+        - id: service-user
+          uri: lb://service-user
+          predicates:
+            - Path=/*/user/** # 路径匹配
 #-----------------上面的配置适合后台微服务---------------------
 #-----------------下面的配置适合带域名的前台微服务--------------
         - id: web-item
@@ -26,3 +30,18 @@ spring:
           uri: lb://web-all  #前台页面微服务 名称
           predicates:
             - Host=www.gmall.com
+        - id: web-list
+          uri: lb://web-all  #前台页面微服务 名称
+          predicates:
+            - Host=list.gmall.com
+        - id: web-passport
+          uri: lb://web-all  #前台页面微服务 名称
+          predicates:
+            - Host=passport.gmall.com
+        - id: web-cart
+          uri: lb://web-all  #前台页面微服务 名称
+          predicates:
+            - Host=cart.gmall.com
+  redis:
+    host: 192.168.200.128
+authUrls: trade.html,pay.html,myOrder.html

@@ -444,17 +444,25 @@ public class ManageServiceImpl implements ManageService {
                     category3Map.put("categoryName", baseCategoryView.getCategory3Name());
                     result3.add(category3Map);
                 }
-
                 category2Map.put("categoryChild", result3);
                 result2.add(category2Map);
             }
-
             category1Map.put("categoryChild",result2);
-
             result.add(category1Map);
-
         }
-
         return result;
+    }
+
+
+    //根据品牌ID查询品牌名称
+    @Override
+    public BaseTrademark getTrademark(Long tmId) {
+        return baseTrademarkMapper.selectById(tmId);
+    }
+
+    //根据skuId查询平台属性ID、属性名称及属性值
+    @Override
+    public List<SkuAttrValue> getSkuAttrValue(Long skuId) {
+        return skuAttrValueMapper.getSkuAttrValue(skuId);
     }
 }
